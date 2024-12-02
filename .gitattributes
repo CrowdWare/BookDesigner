@@ -1,0 +1,24 @@
+# always use LF line endings
+
+# ALL FILES:
+#   Normalize line endings to LF on checkin and
+#   prevent conversion to CRLF when the file is checked out.
+
+* text eol=lf
+
+
+# TEXT FILES:
+
+*.bat text eol=crlf
+
+
+# BINARY FILES:
+#   Disable line ending normalize on checkin.
+
+*.gif binary
+*.icns binary
+*.ico binary
+*.jar binary
+*.png binary
+*.sketch binary
+*.zip binary
