@@ -68,7 +68,7 @@ License
 
 *BookDesigner* is open source licensed under the [GPL-3.0](LICENSE)  
 
-   [Markdown Writer FX](https://github.com/JFormDesigner/bookdesigner)  
+   [Markdown Writer FX]: https://github.com/JFormDesigner/bookdesigner  
    [Markdown]: http://daringfireball.net/projects/markdown/  
    [CommonMark]: http://commonmark.org/  
    [commonmark-java]: https://github.com/atlassian/commonmark-java  
