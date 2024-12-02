@@ -39,6 +39,8 @@ import fr.brouillard.oss.cssfx.api.URIToPathConverter;
 import at.crowdware.bookdesigner.options.Options;
 import at.crowdware.bookdesigner.util.StageState;
 
+import static at.crowdware.bookdesigner.model.BookKt.testQml;
+
 /**
  * Markdown Writer FX application.
  *
@@ -54,6 +56,8 @@ public class BookDesignerApp
 	private StageState stageState;
 
 	public static void main(String[] args) {
+		//System.out.println("main2");
+		//testQml();
 		launch(args);
 	}
 
@@ -64,8 +68,8 @@ public class BookDesignerApp
 
 		// enable auto-reloading CSS files (start with -Dcssfx=true)
 		if (Boolean.getBoolean("cssfx")) {
-//			System.setProperty("cssfx.log", "true");
-//			System.setProperty("cssfx.log.level", "DEBUG");
+			System.setProperty("cssfx.log", "true");
+			System.setProperty("cssfx.log.level", "DEBUG");
 
 			CSSFX.addConverter(new URIToPathConverter() {
 				@Override

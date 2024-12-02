@@ -29,6 +29,8 @@ package at.crowdware.bookdesigner;
 
 import javafx.application.Application;
 
+import static at.crowdware.bookdesigner.model.BookKt.testQml;
+
 /**
  * Markdown Writer FX application.
  *
@@ -37,6 +39,8 @@ import javafx.application.Application;
 public class BookDesignerMain
 {
 	public static void main(String[] args) {
+		System.out.println("main");
+		testQml();
 		Application.launch( at.crowdware.bookdesigner.BookDesignerApp.class, args );
 	}
 }

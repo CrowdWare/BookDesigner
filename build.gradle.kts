@@ -37,6 +37,7 @@ plugins {
 	id( "org.openjfx.javafxplugin" ) version "0.0.13"
 	id( "org.beryx.runtime" ) version "1.13.0"
 	eclipse
+	kotlin("jvm")
 }
 
 repositories {
@@ -87,6 +88,12 @@ dependencies {
 	implementation( "com.google.guava:guava:31.1-jre" ) // required for languagetool, which would otherwise use '31.1-android'
 
 	testImplementation( "junit:junit:4.13.2" )
+
+	// qt
+	implementation("io.qtjambi:qtjambi:6.8.0")
+	implementation("io.qtjambi:qtjambi-qml:6.8.0")
+
+	implementation(kotlin("stdlib-jdk8"))
 }
 
 tasks.compileJava {
@@ -204,3 +211,7 @@ eclipse {
 		}
 	}
 }
+kotlin {
+	jvmToolchain(19)
+}
+
