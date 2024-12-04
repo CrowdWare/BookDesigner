@@ -1,0 +1,106 @@
+
+/*---- menubar ----*/
+.menu-bar {
+    -fx-background-color: -fx-outer-border, #121212;
+    -fx-background-insets: 0 0 0 0, 0 0 1 0;
+}
+
+/*---- toolbar ----*/
+.tool-bar {
+    -fx-spacing: 0;
+    -fx-background-color: #1E1E1E;
+}
+
+.tool-bar .button,
+.tool-bar .toggle-button,
+.tool-bar .choice-box {
+    -fx-background-color: transparent;
+    -fx-text-fill: #EDEDED; /* Primary text */
+}
+
+.tool-bar .button:hover,
+.tool-bar .toggle-button:hover,
+.tool-bar .choice-box:hover {
+    -fx-background-color: #333333; /* Hover state */
+    -fx-text-fill: #FFFFFF; /* Highlight text */
+}
+
+.tool-bar .button:armed,
+.tool-bar .toggle-button:armed {
+    -fx-color: #BB86FC; /* Material Accent Color */
+}
+
+.tool-bar .toggle-button:selected {
+    -fx-background-color: #3700B3; /* Selected state */
+}
+
+/*---- projects combo box ----*/
+.main .projects-combo-box {
+    -fx-background-color: transparent;
+    -fx-text-fill: #EDEDED;
+}
+
+.main .projects-combo-box:hover {
+    -fx-background-color: #292929;
+}
+
+/* use light hover background color in popup list */
+.main .projects-combo-box .combo-box-popup > .list-view .list-cell:filled:hover {
+    -fx-background-color: #333333;
+    -fx-text-fill: #FFFFFF;
+}
+
+/*---- project tree view ----*/
+.main .project-tree-view {
+    -fx-padding: 1 0 0 0;
+    -fx-background-color: #121212; /* Tree background */
+}
+
+.main .project-tree-view .folder .glyph-icon {
+    -fx-fill: #BB86FC; /* Folder accent */
+}
+
+.main .project-tree-view .file,
+.main .project-tree-view .image,
+.main .project-tree-view .hidden {
+    -fx-text-fill: #AAAAAA; /* Dimmed text for files */
+}
+
+.main .project-tree-view .tree-cell:selected {
+    -fx-background-color: #333333;
+    -fx-text-fill: #FFFFFF;
+}
+
+/*---- main tab pane ----*/
+.main .tab-pane > .tab-header-area {
+    -fx-background-color: #1E1E1E; /* Tab header */
+}
+
+.main .tab-pane > .tab-header-area > .tab-header-background {
+    -fx-background-color: #121212;
+}
+
+.main .tab-pane > .tab-header-area > .headers-region > .tab {
+    -fx-background-color: #1E1E1E;
+    -fx-text-fill: #EDEDED;
+}
+
+.main .tab-pane > .tab-header-area > .headers-region > .tab:selected {
+    -fx-background-color: #333333;
+    -fx-text-fill: #FFFFFF;
+}
+
+/*---- scroll bars ----*/
+.scroll-bar > .thumb {
+    -fx-background-color: #333333;
+}
+
+.scroll-bar > .thumb:hover {
+    -fx-background-color: #555555;
+}
+
+/*---- text areas ----*/
+.styled-text-area {
+    -fx-background-color: #121212;
+    -fx-text-fill: #EDEDED;
+}

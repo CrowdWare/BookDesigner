@@ -89,10 +89,6 @@ dependencies {
 
 	testImplementation( "junit:junit:4.13.2" )
 
-	// qt
-	implementation("io.qtjambi:qtjambi:6.8.0")
-	implementation("io.qtjambi:qtjambi-qml:6.8.0")
-
 	implementation(kotlin("stdlib-jdk8"))
 }
 

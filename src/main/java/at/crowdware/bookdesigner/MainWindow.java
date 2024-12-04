@@ -131,6 +131,8 @@ class MainWindow
 
 		scene = new Scene(borderPane);
 		scene.getStylesheets().add("at/crowdware/bookdesigner/BookDesigner.css");
+		//scene.getStylesheets().add("at/crowdware/bookdesigner/dark-theme.css");
+
 		scene.windowProperty().addListener((observable, oldWindow, newWindow) -> {
 			newWindow.setOnCloseRequest(e -> {
 				if (!fileEditorTabPane.canCloseAllEditos())
