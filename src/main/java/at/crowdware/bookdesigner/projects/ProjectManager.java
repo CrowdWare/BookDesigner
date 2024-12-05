@@ -62,7 +62,6 @@ import java.util.prefs.Preferences;
 import at.crowdware.bookdesigner.util.App;
 import at.crowdware.bookdesigner.util.Ebook;
 import at.crowdware.bookdesigner.util.Page;
-import at.crowdware.bookdesigner.viewmodel.ProjectState;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
@@ -497,4 +496,36 @@ public class ProjectManager
 			return second;
 		}
 	}
+
+/*
+	fun fileExists(path: String): Boolean {
+	return File(path).exists()
+}
+
+	fun deleteFile(path: String) {
+		File(path).delete()
+	}
+
+	fun createPage(path: String, title: String) {
+		val file = File(path)
+		file.createNewFile()
+		file.writeText("Page {\n    title:\"$title\"\n}")
+	}
+
+	fun createPart(path: String) {
+		val file = File(path)
+		file.createNewFile()
+		file.writeText("# Header\nLorem ipsum dolor\n")
+	}
+
+	fun renameFile(pathBefore: String, pathAfter: String) {
+		File(pathBefore).renameTo(File(pathAfter))
+	}
+
+	fun copyAssetFile(path: String, target: String) {
+		val sourceFile = File(path)
+		val targetFile = File(target)
+		sourceFile.copyTo(targetFile, overwrite = true)
+	}
+*/
 }

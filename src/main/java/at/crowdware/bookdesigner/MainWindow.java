@@ -53,7 +53,6 @@ import java.util.prefs.Preferences;
 
 import at.crowdware.bookdesigner.dialogs.ProjectDialog;
 import at.crowdware.bookdesigner.model.ProjectData;
-import at.crowdware.bookdesigner.viewmodel.ProjectState;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
