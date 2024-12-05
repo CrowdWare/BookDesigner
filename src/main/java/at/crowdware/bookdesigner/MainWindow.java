@@ -25,11 +25,35 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+/*
+ * Copyright (C) 2024 CrowdWare
+ *
+ * This file is part of BookDesigner.
+ *
+ * BookDesigner is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * BookDesigner is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with BookDesigner.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package at.crowdware.bookdesigner;
 
 import java.text.MessageFormat;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.prefs.Preferences;
+
+import at.crowdware.bookdesigner.dialogs.ProjectDialog;
+import at.crowdware.bookdesigner.model.ProjectData;
+import at.crowdware.bookdesigner.viewmodel.ProjectState;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
@@ -40,19 +64,10 @@ import javafx.beans.value.ObservableBooleanValue;
 import javafx.event.Event;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
+import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.ButtonBase;
-import javafx.scene.control.ChoiceBox;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.Separator;
-import javafx.scene.control.SplitPane;
-import javafx.scene.control.ToggleButton;
-import javafx.scene.control.ToggleGroup;
-import javafx.scene.control.ToolBar;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
@@ -79,6 +94,7 @@ import at.crowdware.bookdesigner.projects.ProjectPane;
 import at.crowdware.bookdesigner.util.Action;
 import at.crowdware.bookdesigner.util.ActionUtils;
 import at.crowdware.bookdesigner.util.Utils;
+
 import static de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon.*;
 
 /**
@@ -197,9 +213,11 @@ class MainWindow
 		BooleanBinding activeFileEditorIsNull = fileEditorTabPane.activeFileEditorProperty().isNull();
 
 		// File actions
+
+		Action fileNewProject = new Action(Messages.get("MainWindow.fileCreateProjectAction"), "Shortcut+P,", FILE, e -> projectNew());
+		Action fileOpenProjectAction = new Action(Messages.get("MainWindow.fileOpenProjectAction"), "Shortcut+Shift+O", FOLDER_OPEN, e -> fileOpenProject());
 		Action fileNewAction = new Action(Messages.get("MainWindow.fileNewAction"), "Shortcut+N", FILE_ALT, e -> fileNew());
 		Action fileOpenAction = new Action(Messages.get("MainWindow.fileOpenAction"), "Shortcut+O", FOLDER_OPEN_ALT, e -> fileOpen());
-		Action fileOpenProjectAction = new Action(Messages.get("MainWindow.fileOpenProjectAction"), "Shortcut+Shift+O", FOLDER_OPEN, e -> fileOpenProject());
 		Action fileCloseAction = new Action(Messages.get("MainWindow.fileCloseAction"), "Shortcut+W", null, e -> fileClose(), activeFileEditorIsNull);
 		Action fileCloseAllAction = new Action(Messages.get("MainWindow.fileCloseAllAction"), null, null, e -> fileCloseAll(), activeFileEditorIsNull);
 		Action fileSaveAction = new Action(Messages.get("MainWindow.fileSaveAction"), "Shortcut+S", FLOPPY_ALT, e -> fileSave(),
@@ -334,9 +352,11 @@ class MainWindow
 		//---- MenuBar ----
 
 		Menu fileMenu = ActionUtils.createMenu(Messages.get("MainWindow.fileMenu"),
+				fileNewProject,
+				fileOpenProjectAction,
+				null,
 				fileNewAction,
 				fileOpenAction,
-				fileOpenProjectAction,
 				null,
 				fileCloseAction,
 				fileCloseAllAction,
@@ -411,9 +431,11 @@ class MainWindow
 		//---- ToolBar ----
 
 		ToolBar toolBar = ActionUtils.createToolBar(
+			fileNewProject,
+				fileOpenProjectAction,
+				null,
 				fileNewAction,
 				fileOpenAction,
-				fileOpenProjectAction,
 				fileSaveAction,
 				null,
 				editUndoAction,
@@ -556,6 +578,14 @@ class MainWindow
 	}
 
 	//---- File actions -------------------------------------------------------
+
+	private void projectNew() {
+		ProjectDialog dialog = new ProjectDialog(getScene().getWindow());
+		Optional<ProjectData> result = dialog.showAndWait();
+		result.ifPresent(data -> {
+			ProjectManager.createProjectFiles(data.getPath(), data.getName(), "Dark");
+		});
+	}
 
 	private void fileNew() {
 		fileEditorTabPane.newEditor();

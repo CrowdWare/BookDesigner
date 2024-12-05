@@ -1,7 +1,7 @@
 # TODO
 - Menu items 
   - Create Projekt
-  - Open Projekt
+
   - Context Menu for Part
     - Add Part
     - Delete Part
@@ -32,3 +32,7 @@
 - Make TemplatesDir -> edit templates via mustache
 
 - Dark Theme + ThemeSwitcher
+
+- Syntax Highlight only for MD
+- Preview switch on only for MD
+- Syntax Highlight for SML
