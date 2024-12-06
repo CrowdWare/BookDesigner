@@ -84,7 +84,11 @@ class FileEditor
 		// avoid that this is GCed
 		tab.setUserData(this);
 
-		this.path.addListener((observable, oldPath, newPath) -> updateTab());
+		this.path.addListener((observable, oldPath, newPath) -> {
+			updateTab();
+			// Force preview update when path changes
+			Platform.runLater(this::updatePreviewType);
+		});
 		modified.addListener((observable, oldModified, newModified) -> updateTab());
 		updateTab();
 
@@ -97,7 +101,11 @@ class FileEditor
 
 		tab.setOnSelectionChanged(e -> {
 			if(tab.isSelected()) {
-				Platform.runLater(() -> activated());
+				Platform.runLater(() -> {
+					activated();
+					// Ensure preview is updated when tab is selected
+					updatePreviewType();
+				});
 
 				Options.markdownRendererProperty().addListener(previewTypeListener);
 				fileEditorTabPane.previewVisible.addListener(previewTypeListener);
@@ -190,25 +198,40 @@ class FileEditor
 			// add/remove previewPane from splitPane
 			ObservableList<Node> splitItems = splitPane.getItems();
 			Node previewPane = markdownPreviewPane.getNode();
-			if (previewType != Type.None) {
-				if (!splitItems.contains(previewPane))
-					splitItems.add(previewPane);
-			} else
+			
+			// Remove preview if it exists and shouldn't be shown
+			if (previewType == Type.None) {
 				splitItems.remove(previewPane);
+			} 
+			// Add preview if it doesn't exist and should be shown
+			else if (!splitItems.contains(previewPane)) {
+				splitItems.add(previewPane);
+			}
 		});
 	}
 
+	private boolean isMarkdownFile() {
+		Path currentPath = path.get();
+		return currentPath != null && currentPath.toString().toLowerCase().endsWith(".md");
+	}
+
 	private MarkdownPreviewPane.Type getPreviewType() {
-		MarkdownPreviewPane.Type previewType = Type.None;
+		// Only show preview for markdown files
+		if (!isMarkdownFile()) {
+			return Type.None;
+		}
+
+		// Determine preview type based on visibility settings
 		if (fileEditorTabPane.previewVisible.get())
-			previewType = MarkdownPreviewPane.Type.Web;
+			return MarkdownPreviewPane.Type.Web;
 		else if (fileEditorTabPane.htmlSourceVisible.get())
-			previewType = MarkdownPreviewPane.Type.Source;
+			return MarkdownPreviewPane.Type.Source;
 		else if (fileEditorTabPane.markdownAstVisible.get())
-			previewType = MarkdownPreviewPane.Type.Ast;
+			return MarkdownPreviewPane.Type.Ast;
 		else if (fileEditorTabPane.externalVisible.get() && MarkdownPreviewPane.hasExternalPreview())
-			previewType = MarkdownPreviewPane.Type.External;
-		return previewType;
+			return MarkdownPreviewPane.Type.External;
+		
+		return Type.None;
 	}
 
 	private void activated() {
@@ -252,8 +275,12 @@ class FileEditor
 		canRedo.bind(undoManager.redoAvailableProperty());
 
 		splitPane = new SplitPane(markdownEditorPane.getNode());
-		if (getPreviewType() != MarkdownPreviewPane.Type.None)
+		
+		// Only add preview pane if it's a markdown file
+		if (isMarkdownFile() && getPreviewType() != MarkdownPreviewPane.Type.None) {
 			splitPane.getItems().add(markdownPreviewPane.getNode());
+		}
+		
 		tab.setContent(splitPane);
 
 		updatePreviewType();
@@ -309,6 +336,9 @@ class FileEditor
 			markdownEditorPane.setReadOnly(readOnly);
 			markdownEditorPane.setMarkdown(markdown);
 			markdownEditorPane.getUndoManager().mark();
+			
+			// Update preview visibility after loading file
+			Platform.runLater(this::updatePreviewType);
 		} catch (IOException ex) {
 			Alert alert = mainWindow.createAlert(AlertType.ERROR,
 				Messages.get("FileEditor.loadFailed.title"),
