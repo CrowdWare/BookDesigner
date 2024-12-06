@@ -33,6 +33,7 @@ import static org.fxmisc.wellbehaved.event.EventPattern.keyPressed;
 import static org.fxmisc.wellbehaved.event.InputMap.*;
 import java.io.File;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -99,8 +100,10 @@ public class MarkdownEditorPane
 	private final SpellChecker spellChecker;
 	private final InvalidationListener optionsListener;
 	private String lineSeparator = getLineSeparatorOrDefault();
+	private String extension = "";
 
-	public MarkdownEditorPane() {
+	public MarkdownEditorPane(String ext) {
+		extension = ext;
 		textArea = new MarkdownTextArea();
 		textArea.setWrapText(true);
 		textArea.setUseInitialStyleForInsertion(true);
@@ -331,13 +334,16 @@ public class MarkdownEditorPane
 		if (isReadOnly())
 			newText = "";
 
-		Node astRoot = parseMarkdown(newText);
+		Node astRoot = null;
+		System.out.println(extension);
+		if (extension != null && extension.equals("md")) {
+			astRoot = parseMarkdown(newText);
 
-		if (Options.isShowImagesEmbedded())
-			EmbeddedImage.replaceImageSegments(textArea, astRoot, getParentPath());
+			if (Options.isShowImagesEmbedded())
+				EmbeddedImage.replaceImageSegments(textArea, astRoot, getParentPath());
 
-		applyHighlighting(astRoot);
-
+			applyHighlighting(astRoot);
+		}
 		markdownText.set(newText);
 		markdownAST.set(astRoot);
 	}
@@ -361,7 +367,7 @@ public class MarkdownEditorPane
 				new ExtraStyledRanges("hit", findReplacePane.getHits()),
 				new ExtraStyledRanges("hit-active", Arrays.asList(findReplacePane.getActiveHit())))
 			: null;
-
+		System.out.println("applyHighlighting");
 		MarkdownSyntaxHighlighter.highlight(textArea, astRoot, extraStyledRanges);
 	}
 

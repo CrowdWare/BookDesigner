@@ -145,6 +145,8 @@ class CommonmarkPreviewRenderer
 	}
 
 	private Node parseMarkdown(String text) {
+		if(text == null)
+			return null;
 		Parser parser = Parser.builder()
 				.extensions(MarkdownExtensions.getCommonmarkExtensions())
 				.includeSourceSpans(IncludeSourceSpans.BLOCKS_AND_INLINES)

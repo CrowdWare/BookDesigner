@@ -31,6 +31,8 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
+
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
@@ -244,6 +246,18 @@ class FileEditor
 		return Type.None;
 	}
 
+	public static String getFileExtension(ObjectProperty filePath) {
+		Path path = Paths.get(filePath.get().toString());
+		String fileName = path.getFileName().toString();
+
+		// Get the file extension
+		int dotIndex = fileName.lastIndexOf('.');
+		if (dotIndex == -1) {
+			return ""; // No extension found
+		}
+		return fileName.substring(dotIndex + 1);
+	}
+
 	private void activated() {
 		if( tab.getTabPane() == null || !tab.isSelected())
 			return; // tab is already closed or no longer active
@@ -257,8 +271,7 @@ class FileEditor
 		}
 
 		// load file and create UI when the tab becomes visible the first time
-
-		markdownEditorPane = new MarkdownEditorPane();
+		markdownEditorPane = new MarkdownEditorPane(getFileExtension(path));
 		markdownPreviewPane = new MarkdownPreviewPane();
 
 		markdownEditorPane.pathProperty().bind(path);

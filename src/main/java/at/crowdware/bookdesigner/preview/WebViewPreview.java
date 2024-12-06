@@ -189,7 +189,8 @@ class WebViewPreview
 							languages.add(0, language); // dependencies must be loaded first
 					}
 				} else
-					visitChildren(node);
+					if(node != null)
+						visitChildren(node);
 			}
 		};
 		visitor.visit(astRoot);
