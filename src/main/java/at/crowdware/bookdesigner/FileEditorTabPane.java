@@ -147,10 +147,6 @@ class FileEditorTabPane
 		});
 
 		// Initialize all visible properties to false
-		//previewSelected.setValue(false);
-		//htmlSourceSelected.setValue(false);
-		//markdownAstSelected.setValue(false);
-		//externalSelected.setValue(false);
 		previewVisible.setValue(false);
 	}
 

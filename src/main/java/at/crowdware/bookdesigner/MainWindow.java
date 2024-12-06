@@ -385,7 +385,6 @@ class MainWindow
 				editFormatAllAction,
 				editFormatSelectionAction);
 
-
 		MenuItem previewMenuItem = ActionUtils.createMenuItem(viewPreviewAction);
 		previewMenuItem.visibleProperty().bind(fileEditorTabPane.previewVisible);
 		MenuItem htmlSourceMenuItem = ActionUtils.createMenuItem(viewHtmlSourceAction);
@@ -408,16 +407,7 @@ class MainWindow
 			showWhitespaceMenuItem,
 			showImagesEmbeddedMenuItem
 		);
-		/*
-		Menu viewMenu = ActionUtils.createMenu(Messages.get("MainWindow.viewMenu"),
-				viewPreviewAction,
-				viewHtmlSourceAction,
-				viewMarkdownAstAction,
-				null,
-				viewShowLineNoAction,
-				viewShowWhitespaceAction,
-				viewShowImagesEmbeddedAction);
-		*/
+
 		if (viewExternalAction != null)
 			viewMenu.getItems().add(3, ActionUtils.createMenuItem(viewExternalAction));
 
@@ -521,17 +511,8 @@ class MainWindow
 		for (Node n : previewButtons) {
 			ToggleButton button = (ToggleButton)n;
 			button.setToggleGroup(viewGroup);
-			// Bind the button's visibility to the corresponding visibility property
-			if (button.getProperties().get("action") == viewPreviewAction) {
-				button.visibleProperty().bind(fileEditorTabPane.previewVisible);
-				button.managedProperty().bind(fileEditorTabPane.previewVisible);
-			} else if (button.getProperties().get("action") == viewHtmlSourceAction) {
-				button.visibleProperty().bind(fileEditorTabPane.previewVisible);
-				button.managedProperty().bind(fileEditorTabPane.previewVisible);
-			} else if (button.getProperties().get("action") == viewMarkdownAstAction) {
-				button.visibleProperty().bind(fileEditorTabPane.previewVisible);
-				button.managedProperty().bind(fileEditorTabPane.previewVisible);
-			}
+			button.visibleProperty().bind(fileEditorTabPane.previewVisible);
+			button.managedProperty().bind(button.visibleProperty());
 		}
 		toolBar.getItems().addAll(previewButtons);
 
