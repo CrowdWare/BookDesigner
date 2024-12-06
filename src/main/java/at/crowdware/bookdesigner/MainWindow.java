@@ -385,6 +385,30 @@ class MainWindow
 				editFormatAllAction,
 				editFormatSelectionAction);
 
+
+		MenuItem previewMenuItem = ActionUtils.createMenuItem(viewPreviewAction);
+		previewMenuItem.visibleProperty().bind(fileEditorTabPane.previewVisible);
+		MenuItem htmlSourceMenuItem = ActionUtils.createMenuItem(viewHtmlSourceAction);
+		htmlSourceMenuItem.visibleProperty().bind(fileEditorTabPane.previewVisible);
+		MenuItem markdownAstMenuItem = ActionUtils.createMenuItem(viewMarkdownAstAction);
+		markdownAstMenuItem.visibleProperty().bind(fileEditorTabPane.previewVisible);
+		SeparatorMenuItem sep = new SeparatorMenuItem();
+		sep.visibleProperty().bind(fileEditorTabPane.previewVisible);
+		MenuItem showLineNoMenuItem = ActionUtils.createMenuItem(viewShowLineNoAction);
+		MenuItem showWhitespaceMenuItem = ActionUtils.createMenuItem(viewShowWhitespaceAction);
+		MenuItem showImagesEmbeddedMenuItem = ActionUtils.createMenuItem(viewShowImagesEmbeddedAction);
+
+		Menu viewMenu = new Menu(Messages.get("MainWindow.viewMenu"),
+			null,
+			previewMenuItem,
+			htmlSourceMenuItem,
+			markdownAstMenuItem,
+			sep,
+			showLineNoMenuItem,
+			showWhitespaceMenuItem,
+			showImagesEmbeddedMenuItem
+		);
+		/*
 		Menu viewMenu = ActionUtils.createMenu(Messages.get("MainWindow.viewMenu"),
 				viewPreviewAction,
 				viewHtmlSourceAction,
@@ -393,6 +417,7 @@ class MainWindow
 				viewShowLineNoAction,
 				viewShowWhitespaceAction,
 				viewShowImagesEmbeddedAction);
+		*/
 		if (viewExternalAction != null)
 			viewMenu.getItems().add(3, ActionUtils.createMenuItem(viewExternalAction));
 
@@ -498,14 +523,14 @@ class MainWindow
 			button.setToggleGroup(viewGroup);
 			// Bind the button's visibility to the corresponding visibility property
 			if (button.getProperties().get("action") == viewPreviewAction) {
-				button.visibleProperty().bind(fileEditorTabPane.previewSelected);
-				button.managedProperty().bind(fileEditorTabPane.previewSelected);
+				button.visibleProperty().bind(fileEditorTabPane.previewVisible);
+				button.managedProperty().bind(fileEditorTabPane.previewVisible);
 			} else if (button.getProperties().get("action") == viewHtmlSourceAction) {
-				button.visibleProperty().bind(fileEditorTabPane.htmlSourceSelected);
-				button.managedProperty().bind(fileEditorTabPane.htmlSourceSelected);
+				button.visibleProperty().bind(fileEditorTabPane.previewVisible);
+				button.managedProperty().bind(fileEditorTabPane.previewVisible);
 			} else if (button.getProperties().get("action") == viewMarkdownAstAction) {
-				button.visibleProperty().bind(fileEditorTabPane.markdownAstSelected);
-				button.managedProperty().bind(fileEditorTabPane.markdownAstSelected);
+				button.visibleProperty().bind(fileEditorTabPane.previewVisible);
+				button.managedProperty().bind(fileEditorTabPane.previewVisible);
 			}
 		}
 		toolBar.getItems().addAll(previewButtons);

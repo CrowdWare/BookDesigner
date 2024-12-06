@@ -146,7 +146,7 @@ class FileEditorTabPane
 			restoreEditorsState();
 		});
 
-		// Initialize all selected properties to false
+		// Initialize all visible properties to false
 		//previewSelected.setValue(false);
 		//htmlSourceSelected.setValue(false);
 		//markdownAstSelected.setValue(false);
@@ -498,6 +498,7 @@ class FileEditorTabPane
 		htmlSourceSelected.init(state, "htmlSourceSelected", false);
 		markdownAstSelected.init(state, "markdownAstSelected", false);
 		externalSelected.init(state, "externalSelected", false);
+		previewVisible.init(state, "previewVisible", false);
 	}
 
 	private void restoreEditorsState() {
