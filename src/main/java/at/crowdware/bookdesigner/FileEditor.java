@@ -74,6 +74,7 @@ class FileEditor
 	private MarkdownEditorPane markdownEditorPane;
 	private MarkdownPreviewPane markdownPreviewPane;
 	private long lastModified;
+	private final BooleanProperty isMarkdown = new SimpleBooleanProperty(false);
 
 	@SuppressWarnings("unchecked")
 	FileEditor(MainWindow mainWindow, FileEditorTabPane fileEditorTabPane, Path path) {
@@ -87,10 +88,14 @@ class FileEditor
 		this.path.addListener((observable, oldPath, newPath) -> {
 			updateTab();
 			// Force preview update when path changes
-			Platform.runLater(this::updatePreviewType);
+			Platform.runLater(() -> {
+				updateIsMarkdown();
+				updatePreviewType();
+			});
 		});
 		modified.addListener((observable, oldModified, newModified) -> updateTab());
 		updateTab();
+		updateIsMarkdown();
 
 		@SuppressWarnings("rawtypes")
 		ChangeListener previewTypeListener = (observable, oldValue, newValue) -> updatePreviewType();
@@ -170,6 +175,16 @@ class FileEditor
 	private final BooleanProperty canRedo = new SimpleBooleanProperty();
 	BooleanProperty canRedoProperty() { return canRedo; }
 
+	// 'isMarkdown' property
+	boolean isMarkdownFile() { return isMarkdown.get(); }
+	ReadOnlyBooleanProperty isMarkdownProperty() { return isMarkdown; }
+
+	private void updateIsMarkdown() {
+		Path currentPath = path.get();
+		boolean isMarkdownFile = currentPath != null && currentPath.toString().toLowerCase().endsWith(".md");
+		isMarkdown.set(isMarkdownFile);
+	}
+
 	private void updateTab() {
 		Path path = this.path.get();
 		tab.setText((path != null) ? path.getFileName().toString() : Messages.get("FileEditor.untitled"));
@@ -208,11 +223,6 @@ class FileEditor
 				splitItems.add(previewPane);
 			}
 		});
-	}
-
-	private boolean isMarkdownFile() {
-		Path currentPath = path.get();
-		return currentPath != null && currentPath.toString().toLowerCase().endsWith(".md");
 	}
 
 	private MarkdownPreviewPane.Type getPreviewType() {
@@ -338,7 +348,7 @@ class FileEditor
 			markdownEditorPane.getUndoManager().mark();
 			
 			// Update preview visibility after loading file
-			Platform.runLater(this::updatePreviewType);
+			Platform.runLater(() -> updatePreviewType());
 		} catch (IOException ex) {
 			Alert alert = mainWindow.createAlert(AlertType.ERROR,
 				Messages.get("FileEditor.loadFailed.title"),

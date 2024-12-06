@@ -148,7 +148,8 @@ class FileEditorTabPane
 
 	private void updatePreviewButtonsVisibility(FileEditor editor) {
 		boolean isMarkdown = editor != null && editor.getPath() != null && 
-							editor.getPath().toString().toLowerCase().endsWith(".md");
+							editor.getPath().toString().toLowerCase().endsWith(".md") &&
+							editor.isMarkdownFile();
 		
 		// Always set the visibility explicitly
 		previewVisible.setValue(isMarkdown);
