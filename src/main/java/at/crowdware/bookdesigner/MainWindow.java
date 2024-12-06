@@ -492,13 +492,28 @@ class MainWindow
 				viewHtmlSourceAction,
 				viewMarkdownAstAction);
 		ToggleGroup viewGroup = new ToggleGroup();
-		for (Node n : previewButtons)
-			((ToggleButton)n).setToggleGroup(viewGroup);
+		for (Node n : previewButtons) {
+			ToggleButton button = (ToggleButton)n;
+			button.setToggleGroup(viewGroup);
+			// Bind the button's visibility to the corresponding visibility property
+			if (button.getProperties().get("action") == viewPreviewAction) {
+				button.visibleProperty().bind(fileEditorTabPane.previewVisible);
+				button.managedProperty().bind(fileEditorTabPane.previewVisible);
+			} else if (button.getProperties().get("action") == viewHtmlSourceAction) {
+				button.visibleProperty().bind(fileEditorTabPane.htmlSourceVisible);
+				button.managedProperty().bind(fileEditorTabPane.htmlSourceVisible);
+			} else if (button.getProperties().get("action") == viewMarkdownAstAction) {
+				button.visibleProperty().bind(fileEditorTabPane.markdownAstVisible);
+				button.managedProperty().bind(fileEditorTabPane.markdownAstVisible);
+			}
+		}
 		toolBar.getItems().addAll(previewButtons);
 
 		if (viewExternalAction != null) {
 			ButtonBase externalPreviewButton = ActionUtils.createToolBarButton(viewExternalAction);
 			((ToggleButton)externalPreviewButton).setToggleGroup(viewGroup);
+			externalPreviewButton.visibleProperty().bind(fileEditorTabPane.externalVisible);
+			externalPreviewButton.managedProperty().bind(fileEditorTabPane.externalVisible);
 			toolBar.getItems().add(externalPreviewButton);
 		}
 
@@ -578,7 +593,7 @@ class MainWindow
 
 	//---- File actions -------------------------------------------------------
 
-	private void projectNew() {
+private void projectNew() {
 		ProjectDialog dialog = new ProjectDialog(getScene().getWindow());
 		Optional<ProjectData> result = dialog.showAndWait();
 		result.ifPresent(data -> {

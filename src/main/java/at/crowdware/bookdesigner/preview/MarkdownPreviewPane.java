@@ -197,8 +197,11 @@ public class MarkdownPreviewPane
 
 			// use another runLater() to make sure that activePreview.editorSelectionChanged()
 			// is invoked after activePreview.update(), so that it can work on already updated text
+
 			Platform.runLater(() -> {
-				activePreview.editorSelectionChanged(previewContext, editorSelection.get());
+				if (activePreview != null) {
+					activePreview.editorSelectionChanged(previewContext, editorSelection.get());
+				}
 			});
 		});
 	}

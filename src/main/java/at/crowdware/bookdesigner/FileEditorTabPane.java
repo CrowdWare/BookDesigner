@@ -72,10 +72,10 @@ class FileEditorTabPane
 	private final ReadOnlyObjectWrapper<FileEditor> activeFileEditor = new ReadOnlyObjectWrapper<>();
 	private final ReadOnlyBooleanWrapper anyFileEditorModified = new ReadOnlyBooleanWrapper();
 
-	final PrefsBooleanProperty previewVisible = new PrefsBooleanProperty(true);
-	final PrefsBooleanProperty htmlSourceVisible = new PrefsBooleanProperty();
-	final PrefsBooleanProperty markdownAstVisible = new PrefsBooleanProperty();
-	final PrefsBooleanProperty externalVisible = new PrefsBooleanProperty();
+	final PrefsBooleanProperty previewVisible = new PrefsBooleanProperty(false);
+	final PrefsBooleanProperty htmlSourceVisible = new PrefsBooleanProperty(false);
+	final PrefsBooleanProperty markdownAstVisible = new PrefsBooleanProperty(false);
+	final PrefsBooleanProperty externalVisible = new PrefsBooleanProperty(false);
 
 	private boolean saveEditorsStateEnabled = true;
 	private boolean inReloadPreviewEditor;
@@ -87,9 +87,11 @@ class FileEditorTabPane
 		tabPane.setFocusTraversable(false);
 		tabPane.setTabClosingPolicy(TabClosingPolicy.ALL_TABS);
 
-		// update activeFileEditor property
+		// update activeFileEditor property and preview button visibility
 		tabPane.getSelectionModel().selectedItemProperty().addListener((observable, oldTab, newTab) -> {
-			activeFileEditor.set((newTab != null) ? (FileEditor) newTab.getUserData() : null);
+			FileEditor editor = (newTab != null) ? (FileEditor) newTab.getUserData() : null;
+			activeFileEditor.set(editor);
+			updatePreviewButtonsVisibility(editor);
 			saveStateActiveEditor();
 		});
 
@@ -139,6 +141,20 @@ class FileEditorTabPane
 			}
 			restoreEditorsState();
 		});
+
+		// Ensure buttons are hidden initially
+		updatePreviewButtonsVisibility(null);
+	}
+
+	private void updatePreviewButtonsVisibility(FileEditor editor) {
+		boolean isMarkdown = editor != null && editor.getPath() != null && 
+							editor.getPath().toString().toLowerCase().endsWith(".md");
+		
+		// Always set the visibility explicitly
+		previewVisible.setValue(isMarkdown);
+		htmlSourceVisible.setValue(isMarkdown);
+		markdownAstVisible.setValue(isMarkdown);
+		externalVisible.setValue(isMarkdown);
 	}
 
 	Node getNode() {
@@ -461,7 +477,7 @@ class FileEditorTabPane
 	private void restoreState() {
 		Preferences state = BookDesignerApp.getState();
 
-		previewVisible.init(state, "previewVisible", true);
+		previewVisible.init(state, "previewVisible", false);
 		htmlSourceVisible.init(state, "htmlSourceVisible", false);
 		markdownAstVisible.init(state, "markdownAstVisible", false);
 		externalVisible.init(state, "externalVisible", false);
