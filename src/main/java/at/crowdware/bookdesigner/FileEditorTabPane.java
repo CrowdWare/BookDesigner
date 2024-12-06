@@ -72,10 +72,14 @@ class FileEditorTabPane
 	private final ReadOnlyObjectWrapper<FileEditor> activeFileEditor = new ReadOnlyObjectWrapper<>();
 	private final ReadOnlyBooleanWrapper anyFileEditorModified = new ReadOnlyBooleanWrapper();
 
+	// Initialize all selected properties to false by default
+	final PrefsBooleanProperty previewSelected = new PrefsBooleanProperty(false);
+	final PrefsBooleanProperty htmlSourceSelected = new PrefsBooleanProperty(false);
+	final PrefsBooleanProperty markdownAstSelected = new PrefsBooleanProperty(false);
+	final PrefsBooleanProperty externalSelected = new PrefsBooleanProperty(false);
+
+	// Initialize all visible properties to false by default
 	final PrefsBooleanProperty previewVisible = new PrefsBooleanProperty(false);
-	final PrefsBooleanProperty htmlSourceVisible = new PrefsBooleanProperty(false);
-	final PrefsBooleanProperty markdownAstVisible = new PrefsBooleanProperty(false);
-	final PrefsBooleanProperty externalVisible = new PrefsBooleanProperty(false);
 
 	private boolean saveEditorsStateEnabled = true;
 	private boolean inReloadPreviewEditor;
@@ -142,20 +146,32 @@ class FileEditorTabPane
 			restoreEditorsState();
 		});
 
-		// Ensure buttons are hidden initially
-		updatePreviewButtonsVisibility(null);
+		// Initialize all selected properties to false
+		//previewSelected.setValue(false);
+		//htmlSourceSelected.setValue(false);
+		//markdownAstSelected.setValue(false);
+		//externalSelected.setValue(false);
+		previewVisible.setValue(false);
 	}
 
 	private void updatePreviewButtonsVisibility(FileEditor editor) {
-		boolean isMarkdown = editor != null && editor.getPath() != null && 
-							editor.getPath().toString().toLowerCase().endsWith(".md") &&
-							editor.isMarkdownFile();
-		
-		// Always set the visibility explicitly
-		previewVisible.setValue(isMarkdown);
-		htmlSourceVisible.setValue(isMarkdown);
-		markdownAstVisible.setValue(isMarkdown);
-		externalVisible.setValue(isMarkdown);
+		// Default to false
+		boolean shouldShow = false;
+
+		// Only show buttons if we have a markdown file
+		if (editor != null && editor.getPath() != null) {
+			String path = editor.getPath().toString().toLowerCase();
+			if (path.endsWith(".md")) {
+				shouldShow = true;
+			}
+		}
+
+		// Update all visibility properties
+		previewVisible.setValue(shouldShow);
+		//previewSelected.setValue(shouldShow);
+		//htmlSourceSelected.setValue(shouldShow);
+		//markdownAstSelected.setValue(shouldShow);
+		//externalSelected.setValue(shouldShow);
 	}
 
 	Node getNode() {
@@ -350,7 +366,7 @@ class FileEditorTabPane
 		return saveEditor(fileEditor);
 	}
 
-	boolean canCloseAllEditos() {
+	boolean canCloseAllEditors() {
 		FileEditor[] allEditors = getAllEditors();
 		FileEditor activeEditor = activeFileEditor.get();
 
@@ -402,7 +418,7 @@ class FileEditorTabPane
 	}
 
 	boolean closeAllEditors(boolean save) {
-		if (save && !canCloseAllEditos())
+		if (save && !canCloseAllEditors())
 			return false;
 
 		runWithoutSavingEditorsState(() -> {
@@ -478,10 +494,10 @@ class FileEditorTabPane
 	private void restoreState() {
 		Preferences state = BookDesignerApp.getState();
 
-		previewVisible.init(state, "previewVisible", false);
-		htmlSourceVisible.init(state, "htmlSourceVisible", false);
-		markdownAstVisible.init(state, "markdownAstVisible", false);
-		externalVisible.init(state, "externalVisible", false);
+		previewSelected.init(state, "previewSelected", false);
+		htmlSourceSelected.init(state, "htmlSourceSelected", false);
+		markdownAstSelected.init(state, "markdownAstSelected", false);
+		externalSelected.init(state, "externalSelected", false);
 	}
 
 	private void restoreEditorsState() {

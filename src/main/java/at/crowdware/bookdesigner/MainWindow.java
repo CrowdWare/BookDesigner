@@ -150,7 +150,7 @@ class MainWindow
 
 		scene.windowProperty().addListener((observable, oldWindow, newWindow) -> {
 			newWindow.setOnCloseRequest(e -> {
-				if (!fileEditorTabPane.canCloseAllEditos())
+				if (!fileEditorTabPane.canCloseAllEditors())
 					e.consume();
 			});
 
@@ -268,14 +268,15 @@ class MainWindow
 
 		// View actions
 		Action viewPreviewAction = new Action(Messages.get("MainWindow.viewPreviewAction"), "F12", EYE,
-				null, null, fileEditorTabPane.previewVisible);
+				null, null, fileEditorTabPane.previewSelected);
+
 		Action viewHtmlSourceAction = new Action(Messages.get("MainWindow.viewHtmlSourceAction"), null, HTML5,
-				null, null, fileEditorTabPane.htmlSourceVisible);
+				null, null, fileEditorTabPane.htmlSourceSelected);
 		Action viewMarkdownAstAction = new Action(Messages.get("MainWindow.viewMarkdownAstAction"), null, SITEMAP,
-				null, null, fileEditorTabPane.markdownAstVisible);
+				null, null, fileEditorTabPane.markdownAstSelected);
 		Action viewExternalAction = MarkdownPreviewPane.hasExternalPreview()
 			? new Action(Messages.get("MainWindow.viewExternalAction"), null, EXTERNAL_LINK,
-				null, null, fileEditorTabPane.externalVisible)
+				null, null, fileEditorTabPane.externalSelected)
 			: null;
 		Action viewShowLineNoAction = new Action(Messages.get("MainWindow.viewShowLineNoAction"), null, null,
 				null, null, Options.showLineNoProperty());
@@ -497,14 +498,14 @@ class MainWindow
 			button.setToggleGroup(viewGroup);
 			// Bind the button's visibility to the corresponding visibility property
 			if (button.getProperties().get("action") == viewPreviewAction) {
-				button.visibleProperty().bind(fileEditorTabPane.previewVisible);
-				button.managedProperty().bind(fileEditorTabPane.previewVisible);
+				button.visibleProperty().bind(fileEditorTabPane.previewSelected);
+				button.managedProperty().bind(fileEditorTabPane.previewSelected);
 			} else if (button.getProperties().get("action") == viewHtmlSourceAction) {
-				button.visibleProperty().bind(fileEditorTabPane.htmlSourceVisible);
-				button.managedProperty().bind(fileEditorTabPane.htmlSourceVisible);
+				button.visibleProperty().bind(fileEditorTabPane.htmlSourceSelected);
+				button.managedProperty().bind(fileEditorTabPane.htmlSourceSelected);
 			} else if (button.getProperties().get("action") == viewMarkdownAstAction) {
-				button.visibleProperty().bind(fileEditorTabPane.markdownAstVisible);
-				button.managedProperty().bind(fileEditorTabPane.markdownAstVisible);
+				button.visibleProperty().bind(fileEditorTabPane.markdownAstSelected);
+				button.managedProperty().bind(fileEditorTabPane.markdownAstSelected);
 			}
 		}
 		toolBar.getItems().addAll(previewButtons);
@@ -512,8 +513,8 @@ class MainWindow
 		if (viewExternalAction != null) {
 			ButtonBase externalPreviewButton = ActionUtils.createToolBarButton(viewExternalAction);
 			((ToggleButton)externalPreviewButton).setToggleGroup(viewGroup);
-			externalPreviewButton.visibleProperty().bind(fileEditorTabPane.externalVisible);
-			externalPreviewButton.managedProperty().bind(fileEditorTabPane.externalVisible);
+			externalPreviewButton.visibleProperty().bind(fileEditorTabPane.externalSelected);
+			externalPreviewButton.managedProperty().bind(fileEditorTabPane.externalSelected);
 			toolBar.getItems().add(externalPreviewButton);
 		}
 

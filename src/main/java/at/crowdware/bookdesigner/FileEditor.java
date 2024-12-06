@@ -113,20 +113,20 @@ class FileEditor
 				});
 
 				Options.markdownRendererProperty().addListener(previewTypeListener);
-				fileEditorTabPane.previewVisible.addListener(previewTypeListener);
-				fileEditorTabPane.htmlSourceVisible.addListener(previewTypeListener);
-				fileEditorTabPane.markdownAstVisible.addListener(previewTypeListener);
-				fileEditorTabPane.externalVisible.addListener(previewTypeListener);
+				fileEditorTabPane.previewSelected.addListener(previewTypeListener);
+				fileEditorTabPane.htmlSourceSelected.addListener(previewTypeListener);
+				fileEditorTabPane.markdownAstSelected.addListener(previewTypeListener);
+				fileEditorTabPane.externalSelected.addListener(previewTypeListener);
 
 				mainWindow.stageFocusedProperty.addListener(stageFocusedListener);
 			} else {
 				Platform.runLater(() -> deactivated());
 
 				Options.markdownRendererProperty().removeListener(previewTypeListener);
-				fileEditorTabPane.previewVisible.removeListener(previewTypeListener);
-				fileEditorTabPane.htmlSourceVisible.removeListener(previewTypeListener);
-				fileEditorTabPane.markdownAstVisible.removeListener(previewTypeListener);
-				fileEditorTabPane.externalVisible.removeListener(previewTypeListener);
+				fileEditorTabPane.previewSelected.removeListener(previewTypeListener);
+				fileEditorTabPane.htmlSourceSelected.removeListener(previewTypeListener);
+				fileEditorTabPane.markdownAstSelected.removeListener(previewTypeListener);
+				fileEditorTabPane.externalSelected.removeListener(previewTypeListener);
 
 				mainWindow.stageFocusedProperty.removeListener(stageFocusedListener);
 			}
@@ -232,13 +232,13 @@ class FileEditor
 		}
 
 		// Determine preview type based on visibility settings
-		if (fileEditorTabPane.previewVisible.get())
+		if (fileEditorTabPane.previewSelected.get())
 			return MarkdownPreviewPane.Type.Web;
-		else if (fileEditorTabPane.htmlSourceVisible.get())
+		else if (fileEditorTabPane.htmlSourceSelected.get())
 			return MarkdownPreviewPane.Type.Source;
-		else if (fileEditorTabPane.markdownAstVisible.get())
+		else if (fileEditorTabPane.markdownAstSelected.get())
 			return MarkdownPreviewPane.Type.Ast;
-		else if (fileEditorTabPane.externalVisible.get() && MarkdownPreviewPane.hasExternalPreview())
+		else if (fileEditorTabPane.externalSelected.get() && MarkdownPreviewPane.hasExternalPreview())
 			return MarkdownPreviewPane.Type.External;
 		
 		return Type.None;

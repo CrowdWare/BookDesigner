@@ -58,6 +58,6 @@ public class FileEditorManager
 		if (ProjectManager.getActiveProject() == null)
 			return true; // keep open editors
 
-		return fileEditorTabPane.canCloseAllEditos();
+		return fileEditorTabPane.canCloseAllEditors();
 	}
 }
